@@ -318,7 +318,7 @@
     <dependency>
       <groupId>org.jgroups</groupId>
       <artifactId>jgroups-raft</artifactId>
-      <version>1.0.0.Final</version>
+      <version>0.5.3.Final</version>
     </dependency>
   </dependencies>
 
