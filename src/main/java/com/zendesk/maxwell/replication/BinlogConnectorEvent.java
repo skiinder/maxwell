@@ -8,6 +8,9 @@ import com.zendesk.maxwell.schema.columndef.ColumnDef;
 import com.zendesk.maxwell.schema.columndef.ColumnDefCastException;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class BinlogConnectorEvent {
@@ -148,11 +151,24 @@ public class BinlogConnectorEvent {
 	}
 
 	private RowMap buildRowMap(String type, Position position, Position nextPosition, Serializable[] data, Table table, BitSet includedColumns, String rowQuery) throws ColumnDefCastException {
+
+		String mockDate = outputConfig.mockDate;
+
+		//测试用，无意义
+		Long timestampMillis=event.getHeader().getTimestamp();;
+
+		if(mockDate != null){
+			LocalDate mockLocalDate = LocalDate.parse(mockDate);
+			LocalDate realLocalDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(timestampMillis));
+			long days = realLocalDate.until(mockLocalDate, ChronoUnit.DAYS);
+			timestampMillis = timestampMillis + days*24*60*60*1000;
+		}
+
 		RowMap map = new RowMap(
 			type,
 			table.getDatabase(),
 			table.getName(),
-			event.getHeader().getTimestamp(),
+			timestampMillis,
 			table.getPKList(),
 			position,
 			nextPosition,

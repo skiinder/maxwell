@@ -23,6 +23,8 @@ public class MaxwellOutputConfig {
 	public String secretKey;
 	public boolean zeroDatesAsNull;
 	public String namingStrategy;
+	//测试用，无实际意义
+	public String mockDate;
 	
 	public MaxwellOutputConfig() {
 		this.includesBinlogPosition = false;
@@ -41,6 +43,7 @@ public class MaxwellOutputConfig {
 		this.encryptionMode = EncryptionMode.ENCRYPT_NONE;
 		this.secretKey = null;
 		this.namingStrategy = null;
+		this.mockDate = null;
 	}
 
 	public boolean encryptionEnabled() {

@@ -21,6 +21,9 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URISyntaxException;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -153,11 +156,24 @@ public class SynchronousBootstrapper {
 	}
 
 	private RowMap bootstrapEventRowMap(String type, String db, String tbl, List<String> pkList, String comment) {
+
+		String mockDate = context.getConfig().outputConfig.mockDate;
+
+		//测试用，无意义
+		Long timestampMillis=System.currentTimeMillis();
+
+		if(mockDate != null){
+			LocalDate mockLocalDate = LocalDate.parse(mockDate);
+			LocalDate realLocalDate = LocalDate.parse(new SimpleDateFormat("yyyy-MM-dd").format(timestampMillis));
+			long days = realLocalDate.until(mockLocalDate, ChronoUnit.DAYS);
+			timestampMillis = timestampMillis + days*24*60*60*1000;
+		}
+
 		RowMap row = new RowMap(
 			type,
 			db,
 			tbl,
-			System.currentTimeMillis(),
+			timestampMillis,
 			pkList,
 			null);
 		row.setComment(comment);

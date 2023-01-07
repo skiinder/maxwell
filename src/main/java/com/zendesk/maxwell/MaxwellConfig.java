@@ -463,6 +463,8 @@ public class MaxwellConfig extends AbstractConfig {
 		parser.accepts( "http_diagnostic_timeout", "the http diagnostic response timeout in ms when http_diagnostic=true. default: 10000" ).withRequiredArg().ofType(Integer.class);
 		parser.accepts( "metrics_jvm", "enable jvm metrics: true|false. default: false" ).withRequiredArg().ofType(Boolean.class);
 
+		parser.accepts("mock_date","用于修改binlog时间戳，测试用，无实际意义").withOptionalArg();
+
 		parser.accepts( "help", "display help" ).withOptionalArg().forHelp();
 
 
@@ -661,6 +663,8 @@ public class MaxwellConfig extends AbstractConfig {
 		outputConfig.outputDDL	= fetchBooleanOption("output_ddl", options, properties, false);
 		outputConfig.zeroDatesAsNull = fetchBooleanOption("output_null_zerodates", options, properties, false);
 		outputConfig.namingStrategy = fetchStringOption("output_naming_strategy", options, properties, null);
+		//测试用
+		outputConfig.mockDate = fetchStringOption("mock_date",options,properties,null);
 		this.excludeColumns     = fetchStringOption("exclude_columns", options, properties, null);
 
 		setupEncryptionOptions(options, properties);
