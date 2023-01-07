@@ -1,6 +1,7 @@
 package com.zendesk.maxwell.schema.columndef;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 
 import com.zendesk.maxwell.producer.MaxwellOutputConfig;
@@ -36,7 +37,7 @@ public class StringColumnDef extends ColumnDef {
 	public String toSQL(Object value) {
 		byte[] b = (byte[]) value;
 
-		if ( charset.equals("utf8") || charset.equals("utf8mb4")) {
+		if ( charset.equals("utf8") || charset.equals("utf8mb4") || charset.equals("utf8mb3")) {
 			return quoteString(new String(b));
 		} else {
 			return "x'" +  Hex.encodeHexString( b ) + "'";
@@ -46,12 +47,12 @@ public class StringColumnDef extends ColumnDef {
 	// this could obviously be more complete.
 	private Charset charsetForCharset() {
 		switch(charset.toLowerCase()) {
-		case "utf8": case "utf8mb4":
-			return Charset.forName("UTF-8");
+		case "utf8": case "utf8mb4": case "utf8mb3":
+			return StandardCharsets.UTF_8;
 		case "latin1": case "ascii":
 			return Charset.forName("Windows-1252");
 		case "ucs2":
-			return Charset.forName("UTF-16");
+			return StandardCharsets.UTF_16;
 		case "ujis":
 			return Charset.forName("EUC-JP");
 		default:
